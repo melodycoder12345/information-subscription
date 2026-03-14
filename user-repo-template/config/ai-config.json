@@ -1,0 +1,6 @@
+{
+  "enabled": false,
+  "model": "",
+  "baseUrl": "",
+  "systemPrompt": "请用中文简洁地总结以下文章的核心要点，100字以内。"
+}

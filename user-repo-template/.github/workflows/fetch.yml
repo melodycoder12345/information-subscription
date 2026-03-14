@@ -1,0 +1,71 @@
+name: 讯流 - 抓取 & 推送
+
+on:
+  # 定时运行（由 Electron 客户端推送的频率配置控制，这里是默认值）
+  schedule:
+    - cron: '0 */6 * * *'  # 默认每6小时；可在客户端设置里修改
+
+  # 允许手动触发
+  workflow_dispatch:
+
+  # 配置文件有更新时自动触发
+  push:
+    paths:
+      - 'config/**'
+    branches:
+      - main
+
+permissions:
+  contents: write   # 允许写入 data/ 目录并 push
+
+jobs:
+  fetch-and-notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 下载讯流后端二进制 ──────────────────────────────────────────
+      # 修改下面的 URL 为你实际的 Release 地址
+      # 格式: https://github.com/<你的用户名>/<源码仓库名>/releases/latest/download/crawler-linux-amd64
+      - name: Download crawler binary
+        run: |
+          RELEASE_URL="https://github.com/${{ vars.CRAWLER_REPO || 'your-username/information-subscription' }}/releases/latest/download/crawler-linux-amd64"
+          echo "Downloading from: $RELEASE_URL"
+          wget -q -O crawler "$RELEASE_URL"
+          chmod +x crawler
+          echo "Binary downloaded successfully"
+
+      # ── 确保 config 目录存在（首次运行时可能为空）──────────────────
+      - name: Ensure config files exist
+        run: |
+          mkdir -p config data/articles
+          [ -f config/subscriptions.json ] || echo '{"feeds":[]}' > config/subscriptions.json
+          [ -f config/crawlers.json ] || echo '{"crawlers":[]}' > config/crawlers.json
+          [ -f config/ai-config.json ] || echo '{"enabled":false}' > config/ai-config.json
+          [ -f config/notifications.json ] || echo '{"enabled":false,"wechatWork":[],"wxpusher":[]}' > config/notifications.json
+          [ -f config/blog.json ] || echo '{"enabled":false}' > config/blog.json
+
+      # ── 执行抓取、AI总结、通知推送 ────────────────────────────────
+      - name: Run crawler
+        env:
+          # ===== 在仓库 Settings → Secrets 里配置以下变量 =====
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}         # 可选，默认 OpenAI；国内模型填对应地址
+          WECHAT_WEBHOOK_URL: ${{ secrets.WECHAT_WEBHOOK_URL }}   # 可选
+          WXPUSHER_APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN }}   # 可选
+          WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}               # 可选
+        run: |
+          ./crawler --config-dir=./config
+          echo "Crawler finished"
+
+      # ── 提交抓取结果到仓库 ────────────────────────────────────────
+      - name: Commit and push data
+        run: |
+          git config --local user.email "xunliu-bot@github.com"
+          git config --local user.name "讯流 Bot"
+          git add data/ config/ || true
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
+          git commit -m "📰 自动抓取 $(date '+%Y-%m-%d %H:%M') [skip ci]"
+          git push

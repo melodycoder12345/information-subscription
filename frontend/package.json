@@ -1,0 +1,55 @@
+{
+  "name": "information-subscription",
+  "version": "1.0.0",
+  "description": "RSS订阅和爬虫应用",
+  "main": "dist-electron/main.js",
+  "homepage": "./",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:electron": "vite build --config vite.config.electron.ts",
+    "preview": "vite preview",
+    "rebuild": "electron-rebuild -f -w better-sqlite3 || npx @electron/rebuild -f -w better-sqlite3",
+    "electron:dev": "npm run rebuild && npm run build:electron && concurrently \"npm run dev\" \"wait-on -t 30000 http://localhost:5173 && NODE_ENV=development electron .\"",
+    "watch:electron": "vite build --config vite.config.electron.ts --watch",
+    "electron:build": "npm run build && npm run build:electron && electron-builder",
+    "build:win": "npm run build && npm run build:electron && electron-builder --win",
+    "build:mac": "npm run build && npm run build:electron && electron-builder --mac",
+    "build:linux": "npm run build && npm run build:electron && electron-builder --linux",
+    "build:all": "npm run build && npm run build:electron && electron-builder --win --mac --linux"
+  },
+  "keywords": [
+    "rss",
+    "crawler",
+    "electron",
+    "react"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@electron/rebuild": "^3.7.2",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "@tanstack/react-query": "^5.17.0",
+    "autoprefixer": "^10.4.16",
+    "better-sqlite3": "^11.10.0",
+    "postcss": "^8.4.32",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
+    "tailwindcss": "^3.4.0",
+    "zustand": "^4.4.7"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "main": "dist-electron/main.js",
+  "files": [
+    "dist/**/*",
+    "dist-electron/**/*"
+  ]
+}

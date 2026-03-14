@@ -1,0 +1,148 @@
+{
+  "defaultFeeds": [
+    {
+      "title": "OpenAI Blog",
+      "url": "https://openai.com/blog/rss.xml",
+      "description": "OpenAI官方博客 - AI研究和产品更新",
+      "fetchInterval": 3600,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "artificial intelligence", "GPT", "LLM", "ChatGPT", "machine learning", "deep learning"]
+    },
+    {
+      "title": "Anthropic Blog",
+      "url": "https://www.anthropic.com/index.xml",
+      "description": "Anthropic官方博客 - Claude AI相关",
+      "fetchInterval": 3600,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "Claude", "LLM", "artificial intelligence", "machine learning"]
+    },
+    {
+      "title": "Google AI Blog",
+      "url": "https://ai.googleblog.com/feeds/posts/default",
+      "description": "Google AI研究博客",
+      "fetchInterval": 3600,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "artificial intelligence", "machine learning", "deep learning", "Gemini", "neural network"]
+    },
+    {
+      "title": "Hacker News AI",
+      "url": "https://hnrss.org/newest?q=AI",
+      "description": "Hacker News AI相关话题",
+      "fetchInterval": 7200,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "artificial intelligence", "machine learning", "GPT", "LLM", "ChatGPT"]
+    },
+    {
+      "title": "Towards Data Science",
+      "url": "https://towardsdatascience.com/feed",
+      "description": "Towards Data Science - AI和机器学习文章",
+      "fetchInterval": 3600,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "machine learning", "deep learning", "neural network", "data science"]
+    },
+    {
+      "title": "Machine Learning Mastery",
+      "url": "https://machinelearningmastery.com/feed/",
+      "description": "机器学习教程和实践",
+      "fetchInterval": 7200,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["machine learning", "AI", "deep learning", "neural network"]
+    },
+    {
+      "title": "Fast.ai Blog",
+      "url": "https://www.fast.ai/atom.xml",
+      "description": "Fast.ai - 实用深度学习",
+      "fetchInterval": 7200,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["deep learning", "AI", "machine learning", "neural network"]
+    },
+    {
+      "title": "Distill.pub",
+      "url": "https://distill.pub/rss.xml",
+      "description": "Distill - 机器学习可视化研究",
+      "fetchInterval": 86400,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["machine learning", "AI", "deep learning", "neural network"]
+    },
+    {
+      "title": "AI Research Papers (arXiv)",
+      "url": "https://arxiv.org/rss/cs.AI",
+      "description": "arXiv AI研究论文",
+      "fetchInterval": 10800,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "artificial intelligence", "machine learning", "deep learning"]
+    },
+    {
+      "title": "TechCrunch AI",
+      "url": "https://techcrunch.com/tag/artificial-intelligence/feed/",
+      "description": "TechCrunch AI新闻",
+      "fetchInterval": 3600,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "artificial intelligence", "machine learning"]
+    }
+  ],
+  "defaultCrawlers": [
+    {
+      "name": "ArXiv AI Papers",
+      "url": "https://arxiv.org/list/cs.AI/recent",
+      "selector": "dt",
+      "fetchInterval": 86400,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "artificial intelligence", "machine learning", "deep learning", "neural network"]
+    },
+    {
+      "name": "Papers with Code",
+      "url": "https://paperswithcode.com/latest",
+      "selector": ".paper-card",
+      "fetchInterval": 86400,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "machine learning", "deep learning", "neural network"]
+    },
+    {
+      "name": "AI News (The Verge)",
+      "url": "https://www.theverge.com/ai-artificial-intelligence",
+      "selector": "article",
+      "fetchInterval": 3600,
+      "enabled": true,
+      "isDefault": true,
+      "filterKeywords": ["AI", "artificial intelligence", "GPT", "LLM", "ChatGPT"]
+    }
+  ],
+  "defaultFilterKeywords": [
+    "AI",
+    "artificial intelligence",
+    "machine learning",
+    "ML",
+    "deep learning",
+    "neural network",
+    "GPT",
+    "LLM",
+    "ChatGPT",
+    "Claude",
+    "Gemini",
+    "OpenAI",
+    "Anthropic",
+    "transformer",
+    "reinforcement learning",
+    "computer vision",
+    "NLP",
+    "natural language processing",
+    "人工智能",
+    "机器学习",
+    "深度学习",
+    "大语言模型",
+    "神经网络"
+  ]
+}

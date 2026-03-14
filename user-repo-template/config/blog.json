@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "generator": "jekyll",
+  "theme": "minima",
+  "title": "我的 AI 资讯",
+  "description": "由讯流自动生成的资讯博客",
+  "author": "",
+  "baseUrl": ""
+}

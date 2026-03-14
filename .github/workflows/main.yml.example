@@ -1,0 +1,44 @@
+name: RSS Crawler
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # 每6小时执行一次
+  workflow_dispatch:
+  push:
+    paths:
+      - 'config/**'
+    branches:
+      - main
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download binary
+        run: |
+          # 从公开分发仓库下载二进制文件
+          wget -O crawler https://github.com/your-username/information-subscription-dist/raw/main/binaries/crawler-linux-amd64
+          chmod +x crawler
+
+      - name: Read configuration
+        run: |
+          cat config/subscriptions.json || echo "{}"
+          cat config/crawlers.json || echo "{}"
+
+      - name: Run crawler
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          WECHAT_WEBHOOK_URL: ${{ secrets.WECHAT_WEBHOOK_URL }}
+          WXPUSHER_APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN }}
+        run: |
+          ./crawler --config-dir=./config
+
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/
+          git commit -m "Update data" || exit 0
+          git push
