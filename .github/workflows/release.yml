@@ -53,11 +53,12 @@ jobs:
 
       - name: Build
         working-directory: ./backend
+        env:
+          GOOS: ${{ matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'windows-latest' && 'windows' || 'darwin' }}
+          GOARCH: amd64
         run: |
           go mod download
-          GOOS=${{ matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'windows-latest' && 'windows' || 'darwin' }} \
-          GOARCH=amd64 \
-          go build -o crawler-${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./cmd/server
+          go build -o crawler${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./cmd/server
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
