@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface FetchIntervalSelectorProps {
   value: number; // 秒数
   onChange: (seconds: number) => void;

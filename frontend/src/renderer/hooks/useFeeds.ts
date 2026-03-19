@@ -8,6 +8,8 @@ export function useFeeds() {
       const feeds = await window.electronAPI.db.getFeeds();
       return feeds.map((feed: any) => ({
         ...feed,
+        enabled: !!feed.enabled,
+        is_default: !!feed.is_default,
         filter_keywords: feed.filter_keywords
           ? JSON.parse(feed.filter_keywords)
           : [],

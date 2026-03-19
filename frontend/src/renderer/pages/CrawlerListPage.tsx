@@ -240,7 +240,7 @@ export default function CrawlerListPage() {
                     <span className="text-sm font-medium text-gray-800 truncate">{crawler.name}</span>
                   </div>
                   <div className="flex items-center gap-1.5 mt-1 ml-3.5">
-                    {crawler.is_default === 1 && (
+                    {crawler.is_default && (
                       <span className="px-1.5 py-0.5 bg-violet-50 text-violet-500 text-xs rounded">内置</span>
                     )}
                     {keywords.length > 0 && (
@@ -278,7 +278,7 @@ export default function CrawlerListPage() {
 
                 {/* 删除 */}
                 <div className="flex justify-center">
-                  {crawler.is_default !== 1 ? (
+                  {!crawler.is_default ? (
                     <button
                       onClick={() => handleDelete(crawler.id!)}
                       className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"

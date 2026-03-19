@@ -8,6 +8,8 @@ export function useCrawlers() {
       const crawlers = await window.electronAPI.db.getCrawlers();
       return crawlers.map((crawler: any) => ({
         ...crawler,
+        enabled: !!crawler.enabled,
+        is_default: !!crawler.is_default,
         filter_keywords: crawler.filter_keywords
           ? JSON.parse(crawler.filter_keywords)
           : [],

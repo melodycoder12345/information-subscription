@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useArticles } from '../hooks/useArticles';
 import { useFeeds } from '../hooks/useFeeds';
-import { Article } from '../types';
 
 type Filter = 'all' | 'rss' | 'crawler';
 

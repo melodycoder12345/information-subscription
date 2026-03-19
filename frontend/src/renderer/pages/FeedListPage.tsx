@@ -240,7 +240,7 @@ export default function FeedListPage() {
                     <span className="text-sm font-medium text-gray-800 truncate">{feed.title}</span>
                   </div>
                   <div className="flex items-center gap-1.5 mt-1 ml-3.5">
-                    {feed.is_default === 1 && (
+                    {feed.is_default && (
                       <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-500 text-xs rounded">内置</span>
                     )}
                     {keywords.length > 0 && (
@@ -276,7 +276,7 @@ export default function FeedListPage() {
 
                 {/* 删除 */}
                 <div className="flex justify-center">
-                  {feed.is_default !== 1 ? (
+                  {!feed.is_default ? (
                     <button
                       onClick={() => handleDelete(feed.id!)}
                       className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"

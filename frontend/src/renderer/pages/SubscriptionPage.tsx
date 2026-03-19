@@ -340,7 +340,7 @@ export default function SubscriptionPage() {
                         <span className="text-sm font-medium text-gray-800 truncate">{feed.title}</span>
                       </div>
                       <div className="flex gap-1.5 mt-1 ml-3.5">
-                        {feed.is_default === 1 && <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-500 text-xs rounded">内置</span>}
+                        {feed.is_default && <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-500 text-xs rounded">内置</span>}
                         {keywords.length > 0 && <span className="px-1.5 py-0.5 bg-amber-50 text-amber-500 text-xs rounded">AI 过滤</span>}
                       </div>
                     </div>
@@ -364,7 +364,7 @@ export default function SubscriptionPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       </button>
-                      {feed.is_default !== 1 ? (
+                      {!feed.is_default ? (
                         <button
                           onClick={() => handleDeleteFeed(feed.id!)}
                           className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
@@ -486,7 +486,7 @@ export default function SubscriptionPage() {
                         <span className="text-sm font-medium text-gray-800 truncate">{crawler.name}</span>
                       </div>
                       <div className="flex gap-1.5 mt-1 ml-3.5">
-                        {crawler.is_default === 1 && <span className="px-1.5 py-0.5 bg-violet-50 text-violet-500 text-xs rounded">内置</span>}
+                        {crawler.is_default && <span className="px-1.5 py-0.5 bg-violet-50 text-violet-500 text-xs rounded">内置</span>}
                         {keywords.length > 0 && <span className="px-1.5 py-0.5 bg-amber-50 text-amber-500 text-xs rounded">AI 过滤</span>}
                       </div>
                     </div>
@@ -510,7 +510,7 @@ export default function SubscriptionPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       </button>
-                      {crawler.is_default !== 1 ? (
+                      {!crawler.is_default ? (
                         <button
                           onClick={() => handleDeleteCrawler(crawler.id!)}
                           className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"

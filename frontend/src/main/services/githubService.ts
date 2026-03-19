@@ -1,18 +1,4 @@
-// GitHub Service implementation
-// Note: @octokit/rest needs to be installed: npm install @octokit/rest
-
-// For now, using a simplified implementation
-interface Octokit {
-  repos: {
-    get: (params: any) => Promise<any>;
-    getContent: (params: any) => Promise<any>;
-    createOrUpdateFileContents: (params: any) => Promise<any>;
-  };
-  actions: {
-    createWorkflowDispatch: (params: any) => Promise<any>;
-    createOrUpdateRepoSecret: (params: any) => Promise<any>;
-  };
-}
+import { Octokit } from '@octokit/rest';
 
 export interface GitHubConfig {
   token: string;
