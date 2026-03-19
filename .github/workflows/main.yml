@@ -17,6 +17,7 @@ on:
 
 jobs:
   crawl:
+    if: github.repository != 'melodycoder12345/information-subscription'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
