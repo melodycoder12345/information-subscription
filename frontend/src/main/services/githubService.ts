@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import sodium from 'libsodium-wrappers';
 
 export interface GitHubConfig {
   token: string;
@@ -37,8 +38,27 @@ export class GitHubService {
       throw new Error('GitHub服务未初始化');
     }
 
-    // GitHub Secrets 需要先获取 public key 并加密；此处未实现。
-    throw new Error('GitHub Secrets 加密未实现，无法创建 Secret');
+    try {
+      const { data: publicKey } = await this.octokit.rest.actions.getRepoPublicKey({
+        owner: this.config.owner,
+        repo: this.config.repo,
+      });
+
+      await sodium.ready;
+      const keyBytes = sodium.from_base64(publicKey.key, sodium.base64_variants.ORIGINAL);
+      const encryptedBytes = sodium.crypto_box_seal(secretValue, keyBytes);
+      const encryptedValue = sodium.to_base64(encryptedBytes, sodium.base64_variants.ORIGINAL);
+
+      await this.octokit.rest.actions.createOrUpdateRepoSecret({
+        owner: this.config.owner,
+        repo: this.config.repo,
+        secret_name: secretName,
+        encrypted_value: encryptedValue,
+        key_id: publicKey.key_id,
+      });
+    } catch (error: any) {
+      throw new Error(`创建Secret失败: ${error.message}`);
+    }
   }
 
   async pushFile(path: string, content: string, message: string): Promise<void> {
