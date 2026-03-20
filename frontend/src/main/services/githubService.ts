@@ -37,20 +37,8 @@ export class GitHubService {
       throw new Error('GitHub服务未初始化');
     }
 
-    // GitHub Secrets需要通过API创建，这里需要实现加密逻辑
-    // 简化版本：直接调用API
-    try {
-      // 注意：GitHub Secrets API需要特殊的加密处理
-      // 这里只是示例，实际需要使用GitHub的公共密钥加密
-      await this.octokit.rest.actions.createOrUpdateRepoSecret({
-        owner: this.config.owner,
-        repo: this.config.repo,
-        secret_name: secretName,
-        encrypted_value: secretValue, // 实际需要先加密
-      });
-    } catch (error: any) {
-      throw new Error(`创建Secret失败: ${error.message}`);
-    }
+    // GitHub Secrets 需要先获取 public key 并加密；此处未实现。
+    throw new Error('GitHub Secrets 加密未实现，无法创建 Secret');
   }
 
   async pushFile(path: string, content: string, message: string): Promise<void> {
