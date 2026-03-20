@@ -32,9 +32,9 @@ linux:
   target:
     - AppImage
     - deb
-    - rpm
-  icon: build/icon.png
+  icon: build/icons
   category: Utility
+  maintainer: Information Subscription
 
 nsis:
   oneClick: false

@@ -20,19 +20,7 @@ rm -rf node_modules/better-sqlite3
 npm install better-sqlite3
 ```
 
-#### 方案 2: 使用 npm 配置
-
-```bash
-cd /Users/hudan/www/information_subscription/frontend
-
-# 设置 npm 配置
-npm config set build-from-source false
-
-# 重新安装 better-sqlite3
-npm rebuild better-sqlite3
-```
-
-#### 方案 3: 安装 Xcode Command Line Tools（如果编译失败）
+#### 方案 2: 安装 Xcode Command Line Tools（如果编译失败）
 
 ```bash
 # 安装 Xcode Command Line Tools
@@ -43,7 +31,7 @@ cd /Users/hudan/www/information_subscription/frontend
 npm rebuild better-sqlite3
 ```
 
-#### 方案 4: 使用兼容的 Node.js 版本
+#### 方案 3: 使用兼容的 Node.js 版本
 
 如果以上方案都不行，建议使用 Node.js LTS 版本：
 
@@ -82,11 +70,7 @@ cd /Users/hudan/www/information_subscription/frontend
 export npm_config_build_from_source=false
 npm rebuild better-sqlite3
 
-# 如果方法 1 失败，尝试方法 2
-npm config set build-from-source false
-npm rebuild better-sqlite3
-
-# 如果还是失败，尝试完整重新安装
+# 如果方法 1 失败，尝试完整重新安装
 rm -rf node_modules/better-sqlite3
 npm install better-sqlite3
 ```

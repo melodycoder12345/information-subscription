@@ -6,6 +6,12 @@ vendor/
 dist/
 dist-electron/
 build/
+!frontend/build/
+!frontend/build/icon.png
+!frontend/build/icon.ico
+!frontend/build/icon.icns
+!frontend/build/icons/
+!frontend/build/icons/*.png
 bin/
 
 # Go binaries

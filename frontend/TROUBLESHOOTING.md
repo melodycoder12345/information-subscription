@@ -15,7 +15,7 @@ xcode-select --install
 如果编译仍然失败，可以尝试使用预编译的二进制文件：
 
 ```bash
-npm install better-sqlite3 --build-from-source=false
+npm_config_build_from_source=false npm install better-sqlite3
 ```
 
 ### 方案 3: 更新 better-sqlite3 版本
@@ -50,7 +50,7 @@ npm install
 1. 先安装其他依赖（跳过 better-sqlite3）：
 ```bash
 npm install --ignore-scripts
-npm install better-sqlite3 --build-from-source=false
+npm_config_build_from_source=false npm install better-sqlite3
 ```
 
 2. 或者使用 yarn：
@@ -75,7 +75,7 @@ npm install
 
 3. 如果仍然失败，尝试使用预编译版本：
 ```bash
-npm install better-sqlite3 --build-from-source=false
+npm_config_build_from_source=false npm install better-sqlite3
 ```
 
 4. 或者使用兼容的 Node.js 版本：

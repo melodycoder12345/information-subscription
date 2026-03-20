@@ -10,6 +10,12 @@ coverage/
 dist/
 dist-electron/
 build/
+!build/
+!build/icon.png
+!build/icon.ico
+!build/icon.icns
+!build/icons/
+!build/icons/*.png
 
 # Misc
 .DS_Store

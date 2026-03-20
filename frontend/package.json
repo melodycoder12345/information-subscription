@@ -10,6 +10,7 @@
     "build:electron": "vite build --config vite.config.electron.ts",
     "preview": "vite preview",
     "rebuild": "electron-rebuild -f -w better-sqlite3 || npx @electron/rebuild -f -w better-sqlite3",
+    "postinstall": "npm run rebuild",
     "electron:dev": "npm run rebuild && npm run build:electron && concurrently \"npm run dev\" \"wait-on -t 30000 http://localhost:5173 && NODE_ENV=development electron .\"",
     "watch:electron": "vite build --config vite.config.electron.ts --watch",
     "electron:build": "npm run build && npm run build:electron && electron-builder",
