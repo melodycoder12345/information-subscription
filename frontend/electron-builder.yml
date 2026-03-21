@@ -44,5 +44,5 @@ nsis:
 
 publish:
   provider: github
-  owner: your-username
-  repo: information-subscription-dist
+  owner: melodycoder12345
+  repo: information-subscription
