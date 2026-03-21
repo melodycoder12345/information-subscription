@@ -100,6 +100,25 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
 
+      - name: Prepare backend release files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for dir in backend-*; do
+            if [ -d "$dir" ]; then
+              suffix="${dir#backend-}"
+              for f in "$dir"/crawler*; do
+                [ -f "$f" ] || continue
+                base="$(basename "$f")"
+                ext=""
+                if [[ "$base" == *.exe ]]; then
+                  ext=".exe"
+                fi
+                cp "$f" "crawler-${suffix}${ext}"
+              done
+            fi
+          done
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -115,7 +134,7 @@ jobs:
             frontend-*/**/*.deb
             frontend-*/**/latest*.yml
             frontend-*/**/*.blockmap
-            backend-*/crawler*
+            crawler-*
           draft: false
           prerelease: false
         env:
