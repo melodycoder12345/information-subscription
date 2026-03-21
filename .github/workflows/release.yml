@@ -40,7 +40,15 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-${{ matrix.os }}
-          path: frontend/dist/*
+          path: |
+            frontend/dist/*.exe
+            frontend/dist/*.dmg
+            frontend/dist/*.zip
+            frontend/dist/*.AppImage
+            frontend/dist/*.deb
+            frontend/dist/*.yml
+            frontend/dist/*.blockmap
+          if-no-files-found: warn
 
   build-backend:
     runs-on: ${{ matrix.os }}
@@ -99,8 +107,14 @@ jobs:
           name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('build-{0}', github.run_number) }}
           target_commitish: ${{ github.sha }}
           files: |
-            frontend-*/**/*
-            backend-*/**/*
+            frontend-*/**/*.exe
+            frontend-*/**/*.dmg
+            frontend-*/**/*.zip
+            frontend-*/**/*.AppImage
+            frontend-*/**/*.deb
+            frontend-*/**/*.yml
+            frontend-*/**/*.blockmap
+            backend-*/crawler*
           draft: false
           prerelease: false
         env:
