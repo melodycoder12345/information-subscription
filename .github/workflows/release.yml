@@ -46,7 +46,7 @@ jobs:
             frontend/dist/*.zip
             frontend/dist/*.AppImage
             frontend/dist/*.deb
-            frontend/dist/*.yml
+            frontend/dist/latest*.yml
             frontend/dist/*.blockmap
           if-no-files-found: warn
 
@@ -106,13 +106,14 @@ jobs:
           tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('build-{0}', github.run_number) }}
           name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('build-{0}', github.run_number) }}
           target_commitish: ${{ github.sha }}
+          overwrite: true
           files: |
             frontend-*/**/*.exe
             frontend-*/**/*.dmg
             frontend-*/**/*.zip
             frontend-*/**/*.AppImage
             frontend-*/**/*.deb
-            frontend-*/**/*.yml
+            frontend-*/**/latest*.yml
             frontend-*/**/*.blockmap
             backend-*/crawler*
           draft: false
