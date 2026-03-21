@@ -13,11 +13,11 @@
     "postinstall": "npm run rebuild",
     "electron:dev": "npm run rebuild && npm run build:electron && concurrently \"npm run dev\" \"wait-on -t 30000 http://localhost:5173 && NODE_ENV=development electron .\"",
     "watch:electron": "vite build --config vite.config.electron.ts --watch",
-    "electron:build": "npm run build && npm run build:electron && electron-builder",
-    "build:win": "npm run build && npm run build:electron && electron-builder --win",
-    "build:mac": "npm run build && npm run build:electron && electron-builder --mac",
-    "build:linux": "npm run build && npm run build:electron && electron-builder --linux",
-    "build:all": "npm run build && npm run build:electron && electron-builder --win --mac --linux"
+    "electron:build": "npm run build && npm run build:electron && electron-builder --publish never",
+    "build:win": "npm run build && npm run build:electron && electron-builder --win --publish never",
+    "build:mac": "npm run build && npm run build:electron && electron-builder --mac --publish never",
+    "build:linux": "npm run build && npm run build:electron && electron-builder --linux --publish never",
+    "build:all": "npm run build && npm run build:electron && electron-builder --win --mac --linux --publish never"
   },
   "keywords": [
     "rss",
