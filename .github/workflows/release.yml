@@ -46,8 +46,6 @@ jobs:
             frontend/dist/*.zip
             frontend/dist/*.AppImage
             frontend/dist/*.deb
-            frontend/dist/latest*.yml
-            frontend/dist/*.blockmap
           if-no-files-found: warn
 
   build-backend:
@@ -132,8 +130,6 @@ jobs:
             frontend-*/**/*.zip
             frontend-*/**/*.AppImage
             frontend-*/**/*.deb
-            frontend-*/**/latest*.yml
-            frontend-*/**/*.blockmap
             crawler-*
           draft: false
           prerelease: false
