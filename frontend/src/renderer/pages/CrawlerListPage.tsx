@@ -1,4 +1,13 @@
 import { useState, useEffect } from 'react';
+import {
+  Bot,
+  Clock,
+  CloudUpload,
+  Info,
+  Loader2,
+  Plus,
+  Trash2,
+} from 'lucide-react';
 import { useCrawlers, useAddCrawler, useUpdateCrawler, useDeleteCrawler } from '../hooks/useCrawlers';
 import { Crawler } from '../types';
 
@@ -83,7 +92,7 @@ export default function CrawlerListPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full" />
+        <Loader2 className="w-8 h-8 text-violet-500 animate-spin shrink-0" strokeWidth={2} aria-hidden />
       </div>
     );
   }
@@ -101,9 +110,7 @@ export default function CrawlerListPage() {
         <div className="flex items-center gap-3">
           {/* 全局抓取频率 */}
           <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg">
-            <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <Clock className="w-3.5 h-3.5 text-gray-400 shrink-0" strokeWidth={2} aria-hidden />
             <span className="text-xs text-gray-500 whitespace-nowrap">抓取频率</span>
             <select
               value={globalInterval}
@@ -118,26 +125,24 @@ export default function CrawlerListPage() {
 
           {hasChanges && (
             <button
+              type="button"
               onClick={handleSave}
               disabled={isSaving}
               className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
             >
               {isSaving
-                ? <span className="animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full" />
-                : <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                  </svg>
+                ? <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" strokeWidth={2} aria-hidden />
+                : <CloudUpload className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-hidden />
               }
               {isSaving ? '推送中…' : '推送到 GitHub'}
             </button>
           )}
           <button
+            type="button"
             onClick={() => setIsAdding((v) => !v)}
             className="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
+            <Plus className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
             添加爬虫
           </button>
         </div>
@@ -145,9 +150,7 @@ export default function CrawlerListPage() {
 
       {/* 频率说明条 */}
       <div className="px-8 py-2 bg-violet-50 border-b border-violet-100 flex items-center gap-2">
-        <svg className="w-3.5 h-3.5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+        <Info className="w-3.5 h-3.5 text-violet-400 shrink-0" strokeWidth={2} aria-hidden />
         <p className="text-xs text-violet-600">
           所有爬虫任务统一使用 <strong>{intervalLabel}</strong> 频率抓取
         </p>
@@ -214,9 +217,7 @@ export default function CrawlerListPage() {
       <div className="flex-1 overflow-y-auto">
         {crawlers.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-            <svg className="w-12 h-12 mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-            </svg>
+            <Bot className="w-12 h-12 mb-3 opacity-40 shrink-0" strokeWidth={1.5} aria-hidden />
             <p className="text-sm font-medium">暂无爬虫任务</p>
             <p className="text-xs mt-1 text-gray-300">点击右上角「添加爬虫」</p>
           </div>
@@ -280,13 +281,12 @@ export default function CrawlerListPage() {
                 <div className="flex justify-center">
                   {!crawler.is_default ? (
                     <button
+                      type="button"
                       onClick={() => handleDelete(crawler.id!)}
                       className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
                       title="删除"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
+                      <Trash2 className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
                     </button>
                   ) : (
                     <span className="text-xs text-gray-200">—</span>

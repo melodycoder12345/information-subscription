@@ -1,4 +1,14 @@
 import { useState, useEffect } from 'react';
+import {
+  Check,
+  Github,
+  Loader2,
+  Save,
+  Settings2,
+  Sparkles,
+  X,
+  Zap,
+} from 'lucide-react';
 
 // ── 服务商 → 模型 配置表 ──────────────────────────────────
 const PROVIDERS = [
@@ -206,47 +216,45 @@ export default function SettingsPage() {
   const currentModels = currentProvider.models;
 
   const Toggle = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
-    <button onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${checked ? 'bg-indigo-500' : 'bg-gray-200'}`}
+    <button type="button" onClick={() => onChange(!checked)}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 shadow-inner ${checked ? 'bg-primary-500' : 'bg-slate-200'}`}
     >
       <span style={{ transform: checked ? 'translateX(22px)' : 'translateX(2px)' }}
-        className="inline-block h-5 w-5 rounded-full bg-white shadow transition-transform" />
+        className="inline-block h-5 w-5 rounded-full bg-white shadow-sm ring-1 ring-black/5 transition-transform" />
     </button>
   );
 
-  const inputCls = 'w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-50';
+  const inputCls = 'w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-400/80 focus:border-primary-300 bg-slate-50/80';
 
   return (
     <div className="flex flex-col h-full">
       {/* 页头 */}
-      <div className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-100">
+      <div className="flex items-center justify-between px-8 py-5 bg-white/90 border-b border-slate-200/80 shadow-sm backdrop-blur-sm">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">系统设置</h1>
-          <p className="text-gray-400 text-xs mt-0.5">配置 GitHub 仓库、AI 服务及功能开关</p>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">系统设置</h1>
+          <p className="text-slate-500 text-xs mt-0.5">配置 GitHub 仓库、AI 服务及功能开关</p>
         </div>
-        <button onClick={handleSave} disabled={isSaving}
-          className={`flex items-center gap-2 px-5 py-2.5 text-white text-sm font-medium rounded-lg transition-all disabled:opacity-60 ${saveOk ? 'bg-emerald-500' : 'bg-indigo-600 hover:bg-indigo-700'}`}
+        <button type="button" onClick={handleSave} disabled={isSaving}
+          className={`flex items-center gap-2 px-5 py-2.5 text-white text-sm font-medium rounded-xl shadow-sm transition-all disabled:opacity-60 ${saveOk ? 'bg-emerald-500 shadow-emerald-900/20' : 'bg-primary-600 hover:bg-primary-700 shadow-primary-900/25'}`}
         >
           {isSaving
-            ? <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+            ? <Loader2 className="w-4 h-4 animate-spin shrink-0" strokeWidth={2} aria-hidden />
             : saveOk
-              ? <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-              : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+              ? <Check className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
+              : <Save className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
           }
           {isSaving ? '保存中…' : saveOk ? '已保存' : '保存设置'}
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-8">
-        <div className="grid grid-cols-2 gap-6">
+      <div className="flex-1 overflow-y-auto p-8 min-h-0">
+        <div className="grid grid-cols-2 gap-6 max-w-[1600px]">
           {/* ── 左栏：GitHub + 功能开关 ── */}
           <div className="space-y-6">
             {/* GitHub 配置 */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="flex items-center gap-2.5 px-6 py-4 border-b border-gray-100 bg-gray-50">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                </svg>
+            <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card overflow-hidden">
+              <div className="flex items-center gap-2.5 px-6 py-4 border-b border-slate-200/60 bg-slate-50/90">
+                <Github className="w-4 h-4 text-slate-800 shrink-0" strokeWidth={2} aria-hidden />
                 <h2 className="text-sm font-semibold text-gray-800">GitHub 配置</h2>
               </div>
               <div className="px-6 py-5 space-y-4">
@@ -262,28 +270,25 @@ export default function SettingsPage() {
                   <p className="text-xs text-gray-400 mt-1">需要 repo 和 workflow 权限</p>
                 </div>
                 <div className="flex items-center gap-3 pt-1">
-                  <button onClick={handleTestConnection} disabled={!githubToken || !githubRepo || testStatus === 'testing'}
+                  <button type="button" onClick={handleTestConnection} disabled={!githubToken || !githubRepo || testStatus === 'testing'}
                     className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors disabled:opacity-50 font-medium"
                   >
                     {testStatus === 'testing'
-                      ? <span className="animate-spin w-3.5 h-3.5 border-2 border-gray-400 border-t-transparent rounded-full" />
-                      : <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      ? <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0 text-slate-500" strokeWidth={2} aria-hidden />
+                      : <Zap className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-hidden />
                     }
                     {testStatus === 'testing' ? '测试中…' : '测试连接'}
                   </button>
-                  {testStatus === 'ok' && <span className="text-sm text-emerald-600 font-medium flex items-center gap-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>{testMsg}</span>}
-                  {testStatus === 'fail' && <span className="text-sm text-red-500 flex items-center gap-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>{testMsg}</span>}
+                  {testStatus === 'ok' && <span className="text-sm text-emerald-600 font-medium flex items-center gap-1"><Check className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />{testMsg}</span>}
+                  {testStatus === 'fail' && <span className="text-sm text-red-500 flex items-center gap-1"><X className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />{testMsg}</span>}
                 </div>
               </div>
             </div>
 
             {/* 功能开关 */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="flex items-center gap-2.5 px-6 py-4 border-b border-gray-100 bg-gray-50">
-                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+            <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card overflow-hidden">
+              <div className="flex items-center gap-2.5 px-6 py-4 border-b border-slate-200/60 bg-slate-50/90">
+                <Settings2 className="w-4 h-4 text-slate-500 shrink-0" strokeWidth={2} aria-hidden />
                 <h2 className="text-sm font-semibold text-gray-800">功能开关</h2>
               </div>
               <div className="px-6 divide-y divide-gray-50">
@@ -306,11 +311,9 @@ export default function SettingsPage() {
           </div>
 
           {/* ── 右栏：AI 配置 ── */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="flex items-center gap-2.5 px-6 py-4 border-b border-gray-100 bg-gray-50">
-              <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
+          <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card overflow-hidden">
+            <div className="flex items-center gap-2.5 px-6 py-4 border-b border-slate-200/60 bg-slate-50/90">
+              <Sparkles className="w-4 h-4 text-purple-500 shrink-0" strokeWidth={2} aria-hidden />
               <h2 className="text-sm font-semibold text-gray-800">AI 配置</h2>
             </div>
 
@@ -323,7 +326,7 @@ export default function SettingsPage() {
                     onClick={() => handleProviderChange(p.id)}
                     className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-left transition-colors ${
                       aiProvider === p.id
-                        ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                        ? 'bg-primary-50 text-primary-700 font-semibold'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >

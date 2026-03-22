@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Archive, Clock, Loader2, Trash2, TriangleAlert } from 'lucide-react';
 
 export default function CleanupPage() {
   const [enabled, setEnabled] = useState(true);
@@ -49,7 +50,7 @@ export default function CleanupPage() {
   };
 
   const Toggle = () => (
-    <button onClick={() => { setEnabled(!enabled); setHasChanges(true); }}
+    <button type="button" onClick={() => { setEnabled(!enabled); setHasChanges(true); }}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${enabled ? 'bg-rose-500' : 'bg-gray-200'}`}
     >
       <span style={{ transform: enabled ? 'translateX(22px)' : 'translateX(2px)' }}
@@ -58,7 +59,7 @@ export default function CleanupPage() {
   );
 
   const StatCard = ({ label, value, sub }: { label: string; value: string | number; sub?: string }) => (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+    <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card p-6">
       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{label}</p>
       <p className="text-3xl font-bold text-gray-900">{value}</p>
       {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
@@ -68,22 +69,22 @@ export default function CleanupPage() {
   return (
     <div className="flex flex-col h-full">
       {/* 页头 */}
-      <div className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-100">
+      <div className="flex items-center justify-between px-8 py-5 bg-white/90 border-b border-slate-200/80 shadow-sm backdrop-blur-sm">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">数据管理</h1>
-          <p className="text-gray-400 text-xs mt-0.5">控制本地 SQLite 数据库的增长</p>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">数据管理</h1>
+          <p className="text-slate-500 text-xs mt-0.5">控制本地 SQLite 数据库的增长</p>
         </div>
         {hasChanges && (
-          <button onClick={handleSave} disabled={isSaving}
-            className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
+          <button type="button" onClick={handleSave} disabled={isSaving}
+            className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium rounded-xl shadow-md shadow-rose-900/20 transition-all disabled:opacity-60"
           >
-            {isSaving ? <span className="animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full" /> : null}
+            {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" strokeWidth={2} aria-hidden /> : null}
             {isSaving ? '保存中…' : '保存配置'}
           </button>
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto p-8 min-h-0">
         {/* 统计卡片 */}
         <div className="grid grid-cols-4 gap-4 mb-6">
           <StatCard label="文章总数" value={stats.articleCount} sub="条记录" />
@@ -101,12 +102,10 @@ export default function CleanupPage() {
 
         <div className="grid grid-cols-2 gap-6">
           {/* 自动清理配置 */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+          <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/60 bg-slate-50/90">
               <h2 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                <svg className="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <Clock className="w-4 h-4 text-rose-500 shrink-0" strokeWidth={2} aria-hidden />
                 自动清理
               </h2>
               <Toggle />
@@ -131,19 +130,24 @@ export default function CleanupPage() {
                 <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">清理方式</label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: 'delete', label: '直接删除', desc: '节省磁盘空间', icon: '🗑️' },
-                    { value: 'archive', label: '归档', desc: '保留但标记为旧', icon: '📦' },
-                  ].map(opt => (
-                    <button key={opt.value} onClick={() => { setCleanupMode(opt.value as any); setHasChanges(true); }}
+                    { value: 'delete' as const, label: '直接删除', desc: '节省磁盘空间', Icon: Trash2 },
+                    { value: 'archive' as const, label: '归档', desc: '保留但标记为旧', Icon: Archive },
+                  ].map((opt) => {
+                    const ModeIcon = opt.Icon;
+                    return (
+                    <button key={opt.value} type="button" onClick={() => { setCleanupMode(opt.value); setHasChanges(true); }}
                       className={`p-4 rounded-xl border-2 text-left transition-all ${
                         cleanupMode === opt.value ? 'border-rose-400 bg-rose-50' : 'border-gray-100 hover:border-gray-200'
                       }`}
                     >
-                      <div className="text-lg mb-1">{opt.icon}</div>
+                      <div className="mb-1 text-rose-600">
+                        <ModeIcon className="w-5 h-5" strokeWidth={2} aria-hidden />
+                      </div>
                       <p className="text-sm font-semibold text-gray-800">{opt.label}</p>
                       <p className="text-xs text-gray-400 mt-0.5">{opt.desc}</p>
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -151,12 +155,10 @@ export default function CleanupPage() {
 
           {/* 手动清理 */}
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+            <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-slate-200/60 bg-slate-50/90">
                 <h2 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
+                  <Trash2 className="w-4 h-4 text-gray-500 shrink-0" strokeWidth={2} aria-hidden />
                   手动清理
                 </h2>
               </div>
@@ -165,14 +167,12 @@ export default function CleanupPage() {
                   将立即清理 <strong>{retentionDays}</strong> 天之前的文章数据，使用
                   <strong>「{cleanupMode === 'delete' ? '直接删除' : '归档'}」</strong>模式。
                 </p>
-                <button onClick={handleManualCleanup} disabled={isCleaning}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
+                <button type="button" onClick={handleManualCleanup} disabled={isCleaning}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium rounded-xl shadow-md shadow-rose-900/20 transition-all disabled:opacity-60"
                 >
                   {isCleaning
-                    ? <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
-                    : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
+                    ? <Loader2 className="w-4 h-4 animate-spin shrink-0" strokeWidth={2} aria-hidden />
+                    : <Trash2 className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
                   }
                   {isCleaning ? '清理中…' : '立即清理'}
                 </button>
@@ -185,7 +185,10 @@ export default function CleanupPage() {
             </div>
 
             <div className="bg-amber-50 rounded-xl border border-amber-100 px-6 py-4">
-              <p className="text-xs font-semibold text-amber-700 mb-1.5">⚠️ 注意</p>
+              <p className="text-xs font-semibold text-amber-700 mb-1.5 flex items-center gap-1.5">
+                <TriangleAlert className="w-3.5 h-3.5 shrink-0 text-amber-600" strokeWidth={2} aria-hidden />
+                注意
+              </p>
               <p className="text-xs text-amber-600 leading-relaxed">
                 删除模式会永久移除旧文章，无法恢复。建议先使用归档模式测试，确认无误后再切换到删除模式。
               </p>

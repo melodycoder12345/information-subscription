@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BookOpen, Check, ExternalLink, Loader2, Save } from 'lucide-react';
 
 export default function BlogConfigPage() {
   const [enabled, setEnabled] = useState(false);
@@ -43,50 +44,48 @@ export default function BlogConfigPage() {
     finally { setIsSaving(false); }
   };
 
-  const inputCls = "w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-400";
+  const inputCls = "w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl bg-slate-50/80 focus:outline-none focus:ring-2 focus:ring-sky-400/80 focus:border-sky-300";
 
   const Toggle = () => (
-    <button onClick={() => { setEnabled(!enabled); setHasChanges(true); }}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${enabled ? 'bg-sky-500' : 'bg-gray-200'}`}
+    <button type="button" onClick={() => { setEnabled(!enabled); setHasChanges(true); }}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors shadow-inner ${enabled ? 'bg-sky-500' : 'bg-slate-200'}`}
     >
       <span style={{ transform: enabled ? 'translateX(22px)' : 'translateX(2px)' }}
-        className="inline-block h-5 w-5 rounded-full bg-white shadow transition-transform" />
+        className="inline-block h-5 w-5 rounded-full bg-white shadow-sm ring-1 ring-black/5 transition-transform" />
     </button>
   );
 
   return (
     <div className="flex flex-col h-full">
       {/* 页头 */}
-      <div className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-100">
+      <div className="flex items-center justify-between px-8 py-5 bg-white/90 border-b border-slate-200/80 shadow-sm backdrop-blur-sm">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">博客发布</h1>
-          <p className="text-gray-400 text-xs mt-0.5">自动生成 Jekyll 博客并发布到 GitHub Pages</p>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">博客发布</h1>
+          <p className="text-slate-500 text-xs mt-0.5">自动生成 Jekyll 博客并发布到 GitHub Pages</p>
         </div>
-        <button onClick={handleSave} disabled={isSaving || !hasChanges}
-          className={`flex items-center gap-2 px-5 py-2.5 text-white text-sm font-medium rounded-lg transition-all disabled:opacity-60 ${
-            saveOk ? 'bg-emerald-500' : 'bg-sky-600 hover:bg-sky-700'
+        <button type="button" onClick={handleSave} disabled={isSaving || !hasChanges}
+          className={`flex items-center gap-2 px-5 py-2.5 text-white text-sm font-medium rounded-xl shadow-sm transition-all disabled:opacity-60 ${
+            saveOk ? 'bg-emerald-500 shadow-emerald-900/20' : 'bg-sky-600 hover:bg-sky-700 shadow-sky-900/25'
           }`}
         >
           {isSaving
-            ? <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+            ? <Loader2 className="w-4 h-4 animate-spin shrink-0" strokeWidth={2} aria-hidden />
             : saveOk
-              ? <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-              : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+              ? <Check className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
+              : <Save className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
           }
           {isSaving ? '保存中…' : saveOk ? '已保存' : '保存配置'}
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-8">
-        <div className="grid grid-cols-2 gap-6">
+      <div className="flex-1 overflow-y-auto p-8 min-h-0">
+        <div className="grid grid-cols-2 gap-6 max-w-[1600px]">
           {/* 左栏：开关 + 主题 */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+            <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-slate-200/60 bg-slate-50/90">
                 <h2 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-                  <svg className="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
+                  <BookOpen className="w-4 h-4 text-sky-500 shrink-0" strokeWidth={2} aria-hidden />
                   博客发布设置
                 </h2>
               </div>
@@ -148,8 +147,8 @@ export default function BlogConfigPage() {
           </div>
 
           {/* 右栏：博客信息 */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+          <div className="bg-white rounded-2xl border border-slate-200/70 shadow-card overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-200/60 bg-slate-50/90">
               <h2 className="text-sm font-semibold text-gray-800">博客信息</h2>
             </div>
             <div className="px-6 py-5 space-y-4">
@@ -181,9 +180,7 @@ export default function BlogConfigPage() {
               {baseUrl && (
                 <a href={baseUrl} target="_blank" rel="noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs text-sky-600 hover:underline">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
+                  <ExternalLink className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-hidden />
                   预览博客
                 </a>
               )}

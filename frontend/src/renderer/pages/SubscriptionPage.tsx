@@ -1,4 +1,14 @@
 import { useState, useEffect } from 'react';
+import {
+  Bot,
+  Clock,
+  CloudUpload,
+  Loader2,
+  Pencil,
+  Plus,
+  Rss,
+  Trash2,
+} from 'lucide-react';
 import { useFeeds, useAddFeed, useUpdateFeed, useDeleteFeed } from '../hooks/useFeeds';
 import { useCrawlers, useAddCrawler, useUpdateCrawler, useDeleteCrawler } from '../hooks/useCrawlers';
 import { Feed, Crawler } from '../types';
@@ -146,26 +156,27 @@ export default function SubscriptionPage() {
 
   const isLoading = feedsLoading || crawlersLoading;
 
-  const Toggle = ({ checked, onChange, color = 'indigo' }: { checked: boolean; onChange: () => void; color?: string }) => (
+  const Toggle = ({ checked, onChange, color = 'primary' }: { checked: boolean; onChange: () => void; color?: string }) => (
     <button
+      type="button"
       onClick={onChange}
       className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-        checked ? (color === 'violet' ? 'bg-violet-500' : 'bg-indigo-500') : 'bg-gray-200'
+        checked ? (color === 'violet' ? 'bg-violet-500 shadow-inner' : 'bg-primary-500 shadow-inner') : 'bg-slate-200'
       }`}
     >
       <span
         style={{ transform: checked ? 'translateX(18px)' : 'translateX(2px)' }}
-        className="inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform"
+        className="inline-block h-3.5 w-3.5 rounded-full bg-white shadow-sm ring-1 ring-black/5 transition-transform"
       />
     </button>
   );
 
-  const inputCls = 'w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-400';
+  const inputCls = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary-400/80 focus:border-primary-300';
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full" />
+        <Loader2 className="w-8 h-8 text-primary-500 animate-spin shrink-0" strokeWidth={2} aria-hidden />
       </div>
     );
   }
@@ -173,19 +184,17 @@ export default function SubscriptionPage() {
   return (
     <div className="flex flex-col h-full">
       {/* ── 页头 ── */}
-      <div className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-100">
+      <div className="flex items-center justify-between px-8 py-5 bg-white/90 border-b border-slate-200/80 shadow-sm backdrop-blur-sm">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">订阅管理</h1>
-          <p className="text-gray-400 text-xs mt-0.5">
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">订阅管理</h1>
+          <p className="text-slate-500 text-xs mt-0.5">
             {feeds.length} 个 RSS 订阅 · {crawlers.length} 个爬虫
           </p>
         </div>
         <div className="flex items-center gap-3">
           {/* 全局抓取频率 */}
-          <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg">
-            <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+          <div className="flex items-center gap-2 px-3 py-2 bg-slate-50/90 border border-slate-200/80 rounded-xl shadow-sm">
+            <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" strokeWidth={2} aria-hidden />
             <span className="text-xs text-gray-500 whitespace-nowrap">抓取频率</span>
             <select
               value={globalInterval}
@@ -200,15 +209,14 @@ export default function SubscriptionPage() {
 
           {hasChanges && (
             <button
+              type="button"
               onClick={handleSave}
               disabled={isSaving}
               className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
             >
               {isSaving
-                ? <span className="animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full" />
-                : <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                  </svg>
+                ? <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" strokeWidth={2} aria-hidden />
+                : <CloudUpload className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-hidden />
               }
               {isSaving ? '推送中…' : '推送到 GitHub'}
             </button>
@@ -217,30 +225,28 @@ export default function SubscriptionPage() {
       </div>
 
       {/* ── Tab 栏 ── */}
-      <div className="flex items-center px-8 bg-white border-b border-gray-100">
+      <div className="flex items-center px-8 bg-white/70 border-b border-slate-200/60">
         <button
+          type="button"
           onClick={() => { setTab('feeds'); setIsAddingFeed(false); setIsAddingCrawler(false); setEditingFeedId(null); setEditingCrawlerId(null); }}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-            tab === 'feeds' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-400 hover:text-gray-700'
+            tab === 'feeds' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-400 hover:text-gray-700'
           }`}
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7M6 17a1 1 0 110 2 1 1 0 010-2z" />
-          </svg>
+          <Rss className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
           RSS 订阅
-          <span className={`px-1.5 py-0.5 text-xs rounded-full ${tab === 'feeds' ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-500'}`}>
+          <span className={`px-1.5 py-0.5 text-xs rounded-full ${tab === 'feeds' ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-500'}`}>
             {feeds.length}
           </span>
         </button>
         <button
+          type="button"
           onClick={() => { setTab('crawlers'); setIsAddingFeed(false); setIsAddingCrawler(false); setEditingFeedId(null); setEditingCrawlerId(null); }}
           className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
             tab === 'crawlers' ? 'border-violet-500 text-violet-600' : 'border-transparent text-gray-400 hover:text-gray-700'
           }`}
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-          </svg>
+          <Bot className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
           网页爬虫
           <span className={`px-1.5 py-0.5 text-xs rounded-full ${tab === 'crawlers' ? 'bg-violet-100 text-violet-600' : 'bg-gray-100 text-gray-500'}`}>
             {crawlers.length}
@@ -251,22 +257,20 @@ export default function SubscriptionPage() {
         <div className="ml-auto py-2">
           {tab === 'feeds' ? (
             <button
+              type="button"
               onClick={() => { setIsAddingFeed((v) => !v); setEditingFeedId(null); }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white text-xs font-medium rounded-xl shadow-sm shadow-primary-900/20 transition-all hover:shadow-md"
             >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
+              <Plus className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-hidden />
               添加订阅
             </button>
           ) : (
             <button
+              type="button"
               onClick={() => { setIsAddingCrawler((v) => !v); setEditingCrawlerId(null); }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-medium rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-medium rounded-xl shadow-sm shadow-violet-900/20 transition-all hover:shadow-md"
             >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
+              <Plus className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-hidden />
               添加爬虫
             </button>
           )}
@@ -278,8 +282,8 @@ export default function SubscriptionPage() {
         <div className="flex flex-col flex-1 overflow-hidden">
           {/* 添加表单 */}
           {isAddingFeed && (
-            <div className="px-8 py-4 bg-indigo-50 border-b border-indigo-100">
-              <p className="text-xs font-semibold text-indigo-600 mb-3">新增订阅源</p>
+            <div className="px-8 py-4 bg-gradient-to-r from-primary-50/90 to-slate-50/50 border-b border-primary-100/80">
+              <p className="text-xs font-semibold text-primary-700 mb-3">新增订阅源</p>
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">名称 *</label>
@@ -300,7 +304,7 @@ export default function SubscriptionPage() {
               <div className="flex justify-end gap-2 mt-3">
                 <button onClick={() => setIsAddingFeed(false)} className="px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50">取消</button>
                 <button onClick={handleAddFeed} disabled={!newFeed.title || !newFeed.url}
-                  className="px-4 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:opacity-50 font-medium">
+                  className="px-4 py-1.5 text-sm bg-primary-600 hover:bg-primary-700 text-white rounded-lg disabled:opacity-50 font-medium">
                   确认添加
                 </button>
               </div>
@@ -308,7 +312,7 @@ export default function SubscriptionPage() {
           )}
 
           {/* 表头 */}
-          <div className="grid grid-cols-[1fr_2fr_1fr_72px_96px] gap-4 px-8 py-3 bg-gray-50 border-b border-gray-100 text-xs font-medium text-gray-500 uppercase tracking-wide flex-shrink-0">
+          <div className="grid grid-cols-[1fr_2fr_1fr_72px_96px] gap-4 px-8 py-3 bg-slate-100/80 border-b border-slate-200/70 text-xs font-semibold text-slate-500 uppercase tracking-wide flex-shrink-0">
             <div>名称</div>
             <div>RSS 地址</div>
             <div>描述</div>
@@ -319,10 +323,8 @@ export default function SubscriptionPage() {
           {/* 列表 */}
           <div className="flex-1 overflow-y-auto">
             {feeds.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-48 text-gray-400">
-                <svg className="w-10 h-10 mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7M6 17a1 1 0 110 2 1 1 0 010-2z" />
-                </svg>
+              <div className="flex flex-col items-center justify-center h-48 text-slate-400">
+                <Rss className="w-10 h-10 mb-2 opacity-40 shrink-0" strokeWidth={1.5} aria-hidden />
                 <p className="text-sm">暂无订阅源，点击右上角「添加订阅」</p>
               </div>
             ) : feeds.map((feed, idx) => {
@@ -333,14 +335,14 @@ export default function SubscriptionPage() {
               return (
                 <div key={feed.id}>
                   {/* 普通行 */}
-                  <div className={`grid grid-cols-[1fr_2fr_1fr_72px_96px] gap-4 px-8 py-3.5 items-center border-b border-gray-50 hover:bg-gray-50/60 transition-colors ${!feed.enabled ? 'opacity-50' : ''} ${idx % 2 !== 0 ? 'bg-gray-50/30' : ''} ${isEditing ? 'bg-indigo-50/40' : ''}`}>
+                  <div className={`grid grid-cols-[1fr_2fr_1fr_72px_96px] gap-4 px-8 py-3.5 items-center border-b border-slate-100/90 hover:bg-slate-50/80 transition-colors ${!feed.enabled ? 'opacity-50' : ''} ${idx % 2 !== 0 ? 'bg-slate-50/40' : ''} ${isEditing ? 'bg-primary-50/50' : ''}`}>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${feed.enabled ? 'bg-emerald-400' : 'bg-gray-300'}`} />
                         <span className="text-sm font-medium text-gray-800 truncate">{feed.title}</span>
                       </div>
                       <div className="flex gap-1.5 mt-1 ml-3.5">
-                        {feed.is_default && <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-500 text-xs rounded">内置</span>}
+                        {feed.is_default && <span className="px-1.5 py-0.5 bg-primary-50 text-primary-500 text-xs rounded">内置</span>}
                         {keywords.length > 0 && <span className="px-1.5 py-0.5 bg-amber-50 text-amber-500 text-xs rounded">AI 过滤</span>}
                       </div>
                     </div>
@@ -356,23 +358,21 @@ export default function SubscriptionPage() {
                     {/* 操作列：编辑 + 删除 */}
                     <div className="flex items-center justify-center gap-1">
                       <button
+                        type="button"
                         onClick={() => isEditing ? setEditingFeedId(null) : handleStartEditFeed(feed)}
-                        className={`p-1.5 rounded-md transition-colors ${isEditing ? 'text-indigo-500 bg-indigo-50' : 'text-gray-300 hover:text-indigo-500 hover:bg-indigo-50'}`}
+                        className={`p-1.5 rounded-md transition-colors ${isEditing ? 'text-primary-500 bg-primary-50' : 'text-gray-300 hover:text-primary-500 hover:bg-primary-50'}`}
                         title="编辑"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
+                        <Pencil className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
                       </button>
                       {!feed.is_default ? (
                         <button
+                          type="button"
                           onClick={() => handleDeleteFeed(feed.id!)}
                           className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
                           title="删除"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
+                          <Trash2 className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
                         </button>
                       ) : (
                         <span className="w-7" />
@@ -382,7 +382,7 @@ export default function SubscriptionPage() {
 
                   {/* 编辑展开区 */}
                   {isEditing && (
-                    <div className="px-8 py-4 bg-indigo-50/60 border-b border-indigo-100">
+                    <div className="px-8 py-4 bg-gradient-to-r from-primary-50/80 to-slate-50/40 border-b border-primary-100/80">
                       <div className="grid grid-cols-3 gap-3">
                         <div>
                           <label className="block text-xs font-medium text-gray-600 mb-1">名称 *</label>
@@ -406,7 +406,7 @@ export default function SubscriptionPage() {
                       <div className="flex justify-end gap-2 mt-3">
                         <button onClick={() => setEditingFeedId(null)} className="px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50">取消</button>
                         <button onClick={handleSaveEditFeed} disabled={!editFeed.title || !editFeed.url}
-                          className="px-4 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:opacity-50 font-medium">
+                          className="px-4 py-1.5 text-sm bg-primary-600 hover:bg-primary-700 text-white rounded-lg disabled:opacity-50 font-medium">
                           保存修改
                         </button>
                       </div>
@@ -424,8 +424,8 @@ export default function SubscriptionPage() {
         <div className="flex flex-col flex-1 overflow-hidden">
           {/* 添加表单 */}
           {isAddingCrawler && (
-            <div className="px-8 py-4 bg-violet-50 border-b border-violet-100">
-              <p className="text-xs font-semibold text-violet-600 mb-3">新增爬虫任务</p>
+            <div className="px-8 py-4 bg-gradient-to-r from-violet-50/90 to-slate-50/50 border-b border-violet-100/80">
+              <p className="text-xs font-semibold text-violet-700 mb-3">新增爬虫任务</p>
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">名称 *</label>
@@ -454,7 +454,7 @@ export default function SubscriptionPage() {
           )}
 
           {/* 表头 */}
-          <div className="grid grid-cols-[1fr_1.5fr_1.5fr_72px_96px] gap-4 px-8 py-3 bg-gray-50 border-b border-gray-100 text-xs font-medium text-gray-500 uppercase tracking-wide flex-shrink-0">
+          <div className="grid grid-cols-[1fr_1.5fr_1.5fr_72px_96px] gap-4 px-8 py-3 bg-slate-100/80 border-b border-slate-200/70 text-xs font-semibold text-slate-500 uppercase tracking-wide flex-shrink-0">
             <div>名称</div>
             <div>目标地址</div>
             <div>CSS 选择器</div>
@@ -465,10 +465,8 @@ export default function SubscriptionPage() {
           {/* 列表 */}
           <div className="flex-1 overflow-y-auto">
             {crawlers.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-48 text-gray-400">
-                <svg className="w-10 h-10 mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                </svg>
+              <div className="flex flex-col items-center justify-center h-48 text-slate-400">
+                <Bot className="w-10 h-10 mb-2 opacity-40 shrink-0" strokeWidth={1.5} aria-hidden />
                 <p className="text-sm">暂无爬虫任务，点击右上角「添加爬虫」</p>
               </div>
             ) : crawlers.map((crawler, idx) => {
@@ -479,7 +477,7 @@ export default function SubscriptionPage() {
               return (
                 <div key={crawler.id}>
                   {/* 普通行 */}
-                  <div className={`grid grid-cols-[1fr_1.5fr_1.5fr_72px_96px] gap-4 px-8 py-3.5 items-center border-b border-gray-50 hover:bg-gray-50/60 transition-colors ${!crawler.enabled ? 'opacity-50' : ''} ${idx % 2 !== 0 ? 'bg-gray-50/30' : ''} ${isEditing ? 'bg-violet-50/40' : ''}`}>
+                  <div className={`grid grid-cols-[1fr_1.5fr_1.5fr_72px_96px] gap-4 px-8 py-3.5 items-center border-b border-slate-100/90 hover:bg-slate-50/80 transition-colors ${!crawler.enabled ? 'opacity-50' : ''} ${idx % 2 !== 0 ? 'bg-slate-50/40' : ''} ${isEditing ? 'bg-violet-50/50' : ''}`}>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${crawler.enabled ? 'bg-emerald-400' : 'bg-gray-300'}`} />
@@ -502,23 +500,21 @@ export default function SubscriptionPage() {
                     {/* 操作列：编辑 + 删除 */}
                     <div className="flex items-center justify-center gap-1">
                       <button
+                        type="button"
                         onClick={() => isEditing ? setEditingCrawlerId(null) : handleStartEditCrawler(crawler)}
                         className={`p-1.5 rounded-md transition-colors ${isEditing ? 'text-violet-500 bg-violet-50' : 'text-gray-300 hover:text-violet-500 hover:bg-violet-50'}`}
                         title="编辑"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
+                        <Pencil className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
                       </button>
                       {!crawler.is_default ? (
                         <button
+                          type="button"
                           onClick={() => handleDeleteCrawler(crawler.id!)}
                           className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
                           title="删除"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
+                          <Trash2 className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
                         </button>
                       ) : (
                         <span className="w-7" />
@@ -528,7 +524,7 @@ export default function SubscriptionPage() {
 
                   {/* 编辑展开区 */}
                   {isEditing && (
-                    <div className="px-8 py-4 bg-violet-50/60 border-b border-violet-100">
+                    <div className="px-8 py-4 bg-gradient-to-r from-violet-50/80 to-slate-50/40 border-b border-violet-100/80">
                       <div className="grid grid-cols-3 gap-3">
                         <div>
                           <label className="block text-xs font-medium text-gray-600 mb-1">名称 *</label>

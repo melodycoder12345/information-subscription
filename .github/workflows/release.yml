@@ -41,7 +41,7 @@ jobs:
         with:
           name: frontend-${{ matrix.os }}
           path: |
-            frontend/dist/*.exe
+            frontend/dist/*Setup*.exe
             frontend/dist/*.dmg
             frontend/dist/*.zip
             frontend/dist/*.AppImage
@@ -56,15 +56,6 @@ jobs:
           - os: ubuntu-latest
             goos: linux
             goarch: amd64
-          - os: windows-latest
-            goos: windows
-            goarch: amd64
-          - os: macos-latest
-            goos: darwin
-            goarch: amd64
-          - os: macos-latest
-            goos: darwin
-            goarch: arm64
 
     steps:
       - uses: actions/checkout@v4
@@ -112,7 +103,9 @@ jobs:
                 if [[ "$base" == *.exe ]]; then
                   ext=".exe"
                 fi
-                cp "$f" "crawler-${suffix}${ext}"
+                if [ "$suffix" = "linux-amd64" ]; then
+                  cp "$f" "crawler-${suffix}${ext}"
+                fi
               done
             fi
           done
@@ -125,12 +118,12 @@ jobs:
           target_commitish: ${{ github.sha }}
           overwrite: true
           files: |
-            frontend-*/**/*.exe
+            frontend-*/**/*Setup*.exe
             frontend-*/**/*.dmg
             frontend-*/**/*.zip
             frontend-*/**/*.AppImage
             frontend-*/**/*.deb
-            crawler-*
+            crawler-linux-amd64
           draft: false
           prerelease: false
         env:

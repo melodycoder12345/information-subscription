@@ -17,9 +17,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="flex h-screen bg-gray-50 overflow-hidden">
+        <div className="flex h-screen min-h-0 overflow-hidden bg-transparent">
           <Sidebar />
-          <main className="flex-1 overflow-hidden">
+          <main className="flex-1 min-h-0 overflow-hidden bg-white/55 backdrop-blur-[8px] supports-[backdrop-filter]:bg-white/45">
             <Routes>
               <Route path="/" element={<Navigate to="/articles" replace />} />
               <Route path="/articles" element={<ArticlesPage />} />

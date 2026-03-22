@@ -17,7 +17,7 @@ export default function SaveButton({
   const handleSave = async () => {
     setIsSaving(true);
     setSaveStatus('idle');
-    
+
     try {
       await onSave();
       setSaveStatus('success');
@@ -33,31 +33,33 @@ export default function SaveButton({
   return (
     <div className="flex items-center gap-3">
       <button
+        type="button"
         onClick={handleSave}
         disabled={disabled || isSaving}
-        className={`px-4 py-2 rounded-md font-medium transition-colors ${
+        className={`px-4 py-2 rounded-xl font-medium text-white shadow-sm transition-all ${
           isSaving
-            ? 'bg-gray-400 cursor-not-allowed'
+            ? 'bg-slate-400 cursor-not-allowed shadow-none'
             : saveStatus === 'success'
-            ? 'bg-green-500 hover:bg-green-600'
-            : saveStatus === 'error'
-            ? 'bg-red-500 hover:bg-red-600'
-            : 'bg-blue-500 hover:bg-blue-600'
-        } text-white`}
+              ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-900/20'
+              : saveStatus === 'error'
+                ? 'bg-red-500 hover:bg-red-600 shadow-red-900/20'
+                : 'bg-primary-600 hover:bg-primary-700 shadow-primary-900/25'
+        }`}
       >
         {isSaving
           ? '保存中...'
           : saveStatus === 'success'
-          ? '保存成功'
-          : saveStatus === 'error'
-          ? '保存失败'
-          : '保存'}
+            ? '保存成功'
+            : saveStatus === 'error'
+              ? '保存失败'
+              : '保存'}
       </button>
       {onCancel && (
         <button
+          type="button"
           onClick={onCancel}
           disabled={isSaving}
-          className="px-4 py-2 rounded-md font-medium bg-gray-200 hover:bg-gray-300 text-gray-700 disabled:opacity-50"
+          className="px-4 py-2 rounded-xl font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 disabled:opacity-50 border border-slate-200/80"
         >
           取消
         </button>

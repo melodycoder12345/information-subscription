@@ -1,4 +1,13 @@
 import { useState, useEffect } from 'react';
+import {
+  Clock,
+  CloudUpload,
+  Info,
+  Loader2,
+  Plus,
+  Rss,
+  Trash2,
+} from 'lucide-react';
 import { useFeeds, useAddFeed, useUpdateFeed, useDeleteFeed } from '../hooks/useFeeds';
 import { Feed } from '../types';
 
@@ -83,7 +92,7 @@ export default function FeedListPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-spin w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full" />
+        <Loader2 className="w-8 h-8 text-primary-500 animate-spin shrink-0" strokeWidth={2} aria-hidden />
       </div>
     );
   }
@@ -93,17 +102,15 @@ export default function FeedListPage() {
   return (
     <div className="flex flex-col h-full">
       {/* 页头 */}
-      <div className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-100">
+      <div className="flex items-center justify-between px-8 py-5 bg-white/90 border-b border-slate-200/80 shadow-sm backdrop-blur-sm">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">RSS 订阅</h1>
-          <p className="text-gray-400 text-xs mt-0.5">共 {feeds.length} 个订阅源</p>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">RSS 订阅</h1>
+          <p className="text-slate-500 text-xs mt-0.5">共 {feeds.length} 个订阅源</p>
         </div>
         <div className="flex items-center gap-3">
           {/* 全局抓取频率 */}
           <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg">
-            <svg className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <Clock className="w-3.5 h-3.5 text-gray-400 shrink-0" strokeWidth={2} aria-hidden />
             <span className="text-xs text-gray-500 whitespace-nowrap">抓取频率</span>
             <select
               value={globalInterval}
@@ -118,44 +125,40 @@ export default function FeedListPage() {
 
           {hasChanges && (
             <button
+              type="button"
               onClick={handleSave}
               disabled={isSaving}
               className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
             >
               {isSaving
-                ? <span className="animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full" />
-                : <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                  </svg>
+                ? <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" strokeWidth={2} aria-hidden />
+                : <CloudUpload className="w-3.5 h-3.5 shrink-0" strokeWidth={2} aria-hidden />
               }
               {isSaving ? '推送中…' : '推送到 GitHub'}
             </button>
           )}
           <button
+            type="button"
             onClick={() => setIsAdding((v) => !v)}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
+            <Plus className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
             添加订阅
           </button>
         </div>
       </div>
 
       {/* 频率说明条 */}
-      <div className="px-8 py-2 bg-indigo-50 border-b border-indigo-100 flex items-center gap-2">
-        <svg className="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p className="text-xs text-indigo-600">
+      <div className="px-8 py-2 bg-primary-50 border-b border-primary-100 flex items-center gap-2">
+        <Info className="w-3.5 h-3.5 text-primary-400 shrink-0" strokeWidth={2} aria-hidden />
+        <p className="text-xs text-primary-600">
           所有订阅源统一使用 <strong>{intervalLabel}</strong> 频率抓取
         </p>
       </div>
 
       {/* 添加表单 */}
       {isAdding && (
-        <div className="px-8 py-4 bg-indigo-50 border-b border-indigo-100">
+        <div className="px-8 py-4 bg-primary-50 border-b border-primary-100">
           <div className="grid grid-cols-3 gap-3 items-end">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">名称 *</label>
@@ -164,7 +167,7 @@ export default function FeedListPage() {
                 placeholder="OpenAI Blog"
                 value={newFeed.title}
                 onChange={(e) => setNewFeed({ ...newFeed, title: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"
               />
             </div>
             <div>
@@ -174,7 +177,7 @@ export default function FeedListPage() {
                 placeholder="https://..."
                 value={newFeed.url}
                 onChange={(e) => setNewFeed({ ...newFeed, url: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"
               />
             </div>
             <div>
@@ -184,7 +187,7 @@ export default function FeedListPage() {
                 placeholder="简短说明"
                 value={newFeed.description}
                 onChange={(e) => setNewFeed({ ...newFeed, description: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 bg-white"
               />
             </div>
           </div>
@@ -193,7 +196,7 @@ export default function FeedListPage() {
             <button
               onClick={handleAddFeed}
               disabled={!newFeed.title || !newFeed.url}
-              className="px-4 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:opacity-50 font-medium"
+              className="px-4 py-1.5 text-sm bg-primary-600 hover:bg-primary-700 text-white rounded-lg disabled:opacity-50 font-medium"
             >
               确认添加
             </button>
@@ -214,9 +217,7 @@ export default function FeedListPage() {
       <div className="flex-1 overflow-y-auto">
         {feeds.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-            <svg className="w-12 h-12 mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7M6 17a1 1 0 110 2 1 1 0 010-2z" />
-            </svg>
+            <Rss className="w-12 h-12 mb-3 opacity-40 shrink-0" strokeWidth={1.5} aria-hidden />
             <p className="text-sm font-medium">暂无订阅源</p>
             <p className="text-xs mt-1 text-gray-300">点击右上角「添加订阅」</p>
           </div>
@@ -241,7 +242,7 @@ export default function FeedListPage() {
                   </div>
                   <div className="flex items-center gap-1.5 mt-1 ml-3.5">
                     {feed.is_default && (
-                      <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-500 text-xs rounded">内置</span>
+                      <span className="px-1.5 py-0.5 bg-primary-50 text-primary-500 text-xs rounded">内置</span>
                     )}
                     {keywords.length > 0 && (
                       <span className="px-1.5 py-0.5 bg-amber-50 text-amber-500 text-xs rounded">AI 过滤</span>
@@ -264,7 +265,7 @@ export default function FeedListPage() {
                   <button
                     onClick={() => handleToggle(feed.id!, !feed.enabled)}
                     className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-                      feed.enabled ? 'bg-indigo-500' : 'bg-gray-200'
+                      feed.enabled ? 'bg-primary-500' : 'bg-gray-200'
                     }`}
                   >
                     <span
@@ -278,13 +279,12 @@ export default function FeedListPage() {
                 <div className="flex justify-center">
                   {!feed.is_default ? (
                     <button
+                      type="button"
                       onClick={() => handleDelete(feed.id!)}
                       className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
                       title="删除"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
+                      <Trash2 className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden />
                     </button>
                   ) : (
                     <span className="text-xs text-gray-200">—</span>
